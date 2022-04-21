@@ -8,14 +8,31 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aavidsoft.instagramassignment.R
 import com.aavidsoft.instagramassignment.models.Post
+import com.aavidsoft.instagramassignment.views.PostView
 
-class PostsAdapter(var posts : ArrayList<Post>) : RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
+class PostsAdapter(var posts: ArrayList<Post>) :
+    RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
 
-    class PostViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        var txtAuthor : TextView = itemView.findViewById(R.id.txtAuthor)
-        var txtPostedOn : TextView = itemView.findViewById(R.id.txtPostedOn)
-        var txtTitle : TextView = itemView.findViewById(R.id.txtTitle)
-        var imgPost : ImageView = itemView.findViewById(R.id.imgPost)
+    inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var postView = itemView as PostView
+
+        init {
+            postView.txtAuthor.setOnClickListener {
+                onPostClickListener?.onAuthorClick(postView,adapterPosition)
+            }
+            postView.txtTitle.setOnClickListener {
+                onPostClickListener?.onTitleClick(postView,adapterPosition)
+            }
+            postView.txtLike.setOnClickListener {
+                onPostClickListener?.onLikeClick(postView,adapterPosition)
+            }
+            postView.imgPost.setOnClickListener {
+                onPostClickListener?.onImageClick(postView,adapterPosition)
+            }
+            postView.iconShare.setOnClickListener {
+                onPostClickListener?.onShareClick(postView,adapterPosition)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -23,28 +40,20 @@ class PostsAdapter(var posts : ArrayList<Post>) : RecyclerView.Adapter<PostsAdap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-            return PostViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.post_view, null)
-        )
+        return PostViewHolder(PostView(parent.context))
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-
-        var post = posts[position]
-        holder.let {
-            it.txtTitle.text = post.author
-            it.txtPostedOn.text = post.postedOn
-            it.txtTitle.text = post.title
-            it.imgPost.setImageResource(post.imageId)
-        }
-
-        /*var post = posts[position]
-
-        holder.txtAuthor.text = post.author
-        holder.txtPostedOn.text = post.postedOn
-        holder.txtTitle.text = post.title
-        holder.imgPost.setImageResource(post.imageId)*/
-
+        holder.postView.post = posts[position]
     }
+
+    interface OnPostClickListener {
+        fun onAuthorClick(postView : PostView, position : Int)
+        fun onTitleClick(postView : PostView, position : Int)
+        fun onImageClick(postView : PostView, position : Int)
+        fun onLikeClick(postView : PostView, position : Int)
+        fun onShareClick(postView : PostView, position : Int)
+    }
+
+    var onPostClickListener : OnPostClickListener? = null
 }

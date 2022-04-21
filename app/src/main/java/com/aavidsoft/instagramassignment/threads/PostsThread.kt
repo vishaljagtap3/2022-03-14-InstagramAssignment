@@ -9,7 +9,7 @@ import com.aavidsoft.instagramassignment.models.Post
 class PostsThread(val postsHandler : Handler) : AsyncTask<Integer, Any?, ArrayList<Post>>() {
 
     override fun doInBackground(vararg pageNumber: Integer?): ArrayList<Post>? {
-        Thread.sleep(5000)
+        Thread.sleep(1000)
 
         var posts = ArrayList<Post>()
 
@@ -20,7 +20,8 @@ class PostsThread(val postsHandler : Handler) : AsyncTask<Integer, Any?, ArrayLi
                     "12 April 2022",
                     R.drawable.dog,
                     "This is a demo title, to test the applications.. ${postIndex}",
-                    "Vishal Jagtap"
+                    "Vishal Jagtap",
+                    12 * postIndex
                 )
             )
         }

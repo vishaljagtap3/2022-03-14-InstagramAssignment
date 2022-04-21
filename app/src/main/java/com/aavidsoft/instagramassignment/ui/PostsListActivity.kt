@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Message
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,7 @@ import com.aavidsoft.instagramassignment.R
 import com.aavidsoft.instagramassignment.adapters.PostsAdapter
 import com.aavidsoft.instagramassignment.models.Post
 import com.aavidsoft.instagramassignment.threads.PostsThread
+import com.aavidsoft.instagramassignment.views.PostView
 
 class PostsListActivity : AppCompatActivity() {
 
@@ -43,6 +45,36 @@ class PostsListActivity : AppCompatActivity() {
 
     private fun setUpListeners() {
         recyclerPosts.addOnScrollListener(RecyclerPostsScrollListener())
+        postsAdapter.onPostClickListener = PostViewClickListener()
+    }
+
+
+    private fun mt(text : String) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    }
+
+    private inner class PostViewClickListener : PostsAdapter.OnPostClickListener {
+        override fun onAuthorClick(postView: PostView, position: Int) {
+            mt("Author: Details of ${posts[position].author}")
+        }
+
+        override fun onTitleClick(postView: PostView, position: Int) {
+            mt("Title: ${posts[position].title}")
+        }
+
+        override fun onImageClick(postView: PostView, position: Int) {
+            mt("Image: ${posts[position].title}")
+        }
+
+        override fun onLikeClick(postView: PostView, position: Int) {
+            posts[position].numberOfLikes++
+            postsAdapter.notifyDataSetChanged()
+        }
+
+        override fun onShareClick(postView: PostView, position: Int) {
+            mt("Share: ${posts[position].title}")
+        }
+
     }
 
     private inner class RecyclerPostsScrollListener : RecyclerView.OnScrollListener() {

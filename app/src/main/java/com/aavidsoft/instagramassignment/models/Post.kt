@@ -5,5 +5,6 @@ data class Post(
     var postedOn : String,
     var imageId : Int,
     var title : String,
-    var author : String
+    var author : String,
+    var numberOfLikes : Int = 0
 )
